@@ -1,0 +1,26 @@
+{
+  "name": "lambda-hand",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build",
+    "prebuild": "rm -rf ./dist",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hand-inc/lambda-hand.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hand-inc/lambda-hand/issues"
+  },
+  "homepage": "https://github.com/hand-inc/lambda-hand#readme",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

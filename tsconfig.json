@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "rootDirs": ["src", "src/__tests__"],
+    "allowJs": true,
+    "lib": ["es2019"]
+  },
+  "include": ["src", "config"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}
