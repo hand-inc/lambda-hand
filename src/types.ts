@@ -12,10 +12,11 @@ export interface HandlerBuilderInterface extends LambdaMiddlewareType {
   getResponseHandler: any;
 }
 
-export interface HandlerRunnerInterface<T,Q>{
+export interface HandlerRunnerInterface<T, Q> {
   runResponseHandler: () => Promise<T>;
   runErrorHandler: (error: Error) => Promise<Q>;
 }
+
 export type HandlerError = any;
 export type HandlerResponse = any;
 export type HandlerType = HandlerError | HandlerResponse;
