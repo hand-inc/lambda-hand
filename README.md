@@ -1,12 +1,12 @@
 # Lambda-Hand
 
-## How to install:
+### How to install:
 
 ```bash
 npm i -S lambda-hand
 ```
 
-## How to use:
+### How to use:
 
 ```javascript
 import { Handler } from 'lambda-hand';
@@ -34,13 +34,12 @@ const middleware3 = (event: any, context:any) => {};
 
 export const AuthorizationHandler = Handler()
   .use(middleware1, middleware2, middleware3)
-  // .use(() => {throw new Error()})
   .setResponseHandler((event, context) => console.log(event, context))
   .setErrorHandler((error) => console.log(error));
 ```
 The handler will return a function with the type:
 ```javascript
- (event: any, context:any) => any
+ (event: any, context: any) => Promise<any>
 ```
 ### How to extend a Handler:
 ```javascript
@@ -65,7 +64,7 @@ functions:
 ```
 
 
-## Methods
+### Methods
 
 |  Method |  Description |
 |---|---|
