@@ -2,18 +2,21 @@ import { randomUUID } from "crypto";
 import { HandlerService } from "./handler.service";
 import {
   HandlerError,
+  HandlerEventData,
   HandlerEventTypes,
   HandlerResponse,
   HandlerRunnerInterface,
   HandlerType,
   LambdaMiddlewareType,
 } from "./types";
+import { Benchmark } from "./handler.utils";
 export class HandlerRunner
   implements HandlerRunnerInterface<HandlerResponse, HandlerError>
 {
   private step: number;
   private current: LambdaMiddlewareType | null;
-  private executionId: string;
+  private executionId: string | null;
+  private benchmark: Benchmark | null;
 
   constructor(
     private event: any,
@@ -25,12 +28,17 @@ export class HandlerRunner
     this.handlerRef = handlerRef;
     this.step = 0;
     this.current = null;
-    this.executionId = "";
+    this.executionId = null;
+    this.benchmark = null;
   }
 
   async run(): Promise<HandlerType> {
     this.executionId = randomUUID();
+
+    this.benchmark = new Benchmark();
+
     this.dispatchEvent("hand:start");
+
     try {
       for (const middleware of this.handlerRef.middlewares) {
         await this.runMiddleware(middleware);
@@ -64,36 +72,35 @@ export class HandlerRunner
   async runMiddleware(middleware: LambdaMiddlewareType): Promise<HandlerType> {
     this.current = middleware;
 
-    this.dispatchEvent("hand:middleware_in");
+    this.dispatchEvent("hand:middleware:before");
 
     await middleware(this.event, this.context);
 
-    this.dispatchEvent("hand:middleware_out");
-
+    this.dispatchEvent("hand:middleware:after");
     this.step++;
   }
 
   async runResponseHandler(): Promise<HandlerType> {
-    this.dispatchEvent("hand:response_in");
-
     if (!this.handlerRef.responseHandler) {
       return;
     }
+
+    this.dispatchEvent("hand:response:before");
 
     const response = await this.handlerRef.responseHandler(
       this.event,
       this.context
     );
 
-    this.dispatchEvent("hand:response_out", {
+    this.dispatchEvent("hand:response:after", {
       response_handler_out: response || {},
     });
 
     return response;
   }
 
-  dispatchEvent(type: HandlerEventTypes, data?: any): void {
-    const eventObject = {
+  dispatchEvent(type: HandlerEventTypes, additionalInfo?: any): void {
+    const eventObject: HandlerEventData = {
       type,
       data: {
         time: new Date(),
@@ -102,9 +109,17 @@ export class HandlerRunner
         middleware_name: this?.current?.name || "anonymous",
         execution_id: this.executionId,
         step: this.step,
-        additional_info: data,
+        additional_info: additionalInfo || null,
       },
     };
+
+    const duration = this?.benchmark?.run(type);
+    if (duration) {
+      eventObject.data = {
+        ...eventObject.data,
+        duration_ms: duration,
+      };
+    }
 
     this.handlerRef.eventsEmitter.dispatchEvent(type, eventObject);
   }
