@@ -27,13 +27,13 @@ export interface HandlerRunnerInterface<T, Q> {
 
 export type HandlerEventCallback = (...args: any[]) => void;
 export type HandlerEventTypes =
-  | "middleware_out"
-  | "middleware_in"
-  | "response_in"
-  | "response_out"
-  | "start"
-  | "end"
-  | "error";
+  | "hand:middleware_in"
+  | "hand:middleware_out"
+  | "hand:response_in"
+  | "hand:response_out"
+  | "hand:start"
+  | "hand:end"
+  | "hand:error";
 
 export type HandlerError = any;
 export type HandlerResponse = any;

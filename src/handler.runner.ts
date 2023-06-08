@@ -30,7 +30,7 @@ export class HandlerRunner
 
   async run(): Promise<HandlerType> {
     this.executionId = randomUUID();
-    this.dispatchEvent("start");
+    this.dispatchEvent("hand:start");
     try {
       for (const middleware of this.handlerRef.middlewares) {
         await this.runMiddleware(middleware);
@@ -39,13 +39,13 @@ export class HandlerRunner
     } catch (error: any) {
       return await this.runErrorHandler(error);
     } finally {
-      this.dispatchEvent("end");
+      this.dispatchEvent("hand:end");
     }
   }
 
   async runErrorHandler(error: any): Promise<HandlerError> {
     if (!this.handlerRef.errorHandler) {
-      this.dispatchEvent("error", { error });
+      this.dispatchEvent("hand:error", { error });
       throw error;
     }
 
@@ -53,7 +53,7 @@ export class HandlerRunner
 
     const errorResponse = this.handlerRef.errorHandler(error, this.context);
 
-    this.dispatchEvent("error", {
+    this.dispatchEvent("hand:error", {
       error_handler_out: errorResponse,
       error,
     });
@@ -64,17 +64,17 @@ export class HandlerRunner
   async runMiddleware(middleware: LambdaMiddlewareType): Promise<HandlerType> {
     this.current = middleware;
 
-    this.dispatchEvent("middleware_in");
+    this.dispatchEvent("hand:middleware_in");
 
     await middleware(this.event, this.context);
 
-    this.dispatchEvent("middleware_out");
+    this.dispatchEvent("hand:middleware_out");
 
     this.step++;
   }
 
   async runResponseHandler(): Promise<HandlerType> {
-    this.dispatchEvent("response_in");
+    this.dispatchEvent("hand:response_in");
 
     if (!this.handlerRef.responseHandler) {
       return;
@@ -85,7 +85,7 @@ export class HandlerRunner
       this.context
     );
 
-    this.dispatchEvent("response_out", {
+    this.dispatchEvent("hand:response_out", {
       response_handler_out: response || {},
     });
 
