@@ -20,12 +20,14 @@ export class HandlerService {
   extends(handler: HandlerBuilderInterface): HandlerService {
     this.middlewares = [...handler.getMiddlewares(), ...this.middlewares];
 
-    if (handler.getErrorHandler()) {
-      this.setErrorHandler(handler.getErrorHandler());
+    const errorHandler = handler.getErrorHandler();
+    if (errorHandler) {
+      this.setErrorHandler(errorHandler);
     }
 
-    if (handler.getResponseHandler()) {
-      this.setResponseHandler(handler.getResponseHandler());
+    const responseHandler = handler.getResponseHandler();
+    if (responseHandler) {
+      this.setResponseHandler(responseHandler);
     }
 
     return this;

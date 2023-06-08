@@ -1,9 +1,9 @@
 {
   "name": "lambda-hand",
-  "version": "1.0.0",
+  "version": "1.0.21",
   "description": "",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "./node_modules/ts-mocha/bin/ts-mocha -p tsconfig.json src/**/*.test.ts",
     "prepare": "npm run build",

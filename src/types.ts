@@ -3,13 +3,13 @@ export type ErrorMiddlewareType = <T>(error: Error) => T;
 export type ResponseMiddlewareType = LambdaMiddlewareType;
 
 export interface HandlerBuilderInterface extends LambdaMiddlewareType {
-  use: any;
-  extends: any;
-  setErrorHandler: any;
-  setResponseHandler: any;
-  getMiddlewares: any;
-  getErrorHandler: any;
-  getResponseHandler: any;
+  use: (...middleware: LambdaMiddlewareType[]) => HandlerBuilderInterface;
+  extends: (handlerService: HandlerBuilderInterface) => HandlerBuilderInterface;
+  setErrorHandler: (errorHandler: ErrorMiddlewareType) => HandlerBuilderInterface;
+  setResponseHandler: (responseHandler: ResponseMiddlewareType) => HandlerBuilderInterface;
+  getMiddlewares: () => LambdaMiddlewareType[];
+  getErrorHandler: () => ErrorMiddlewareType | null;
+  getResponseHandler: () => ResponseMiddlewareType | null;
 }
 
 export interface HandlerRunnerInterface<T, Q> {
