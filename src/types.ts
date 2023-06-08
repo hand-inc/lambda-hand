@@ -1,8 +1,6 @@
-export type LambdaMiddlewareType = <T>(
-  event: any,
-  context?: any
-) => Promise<T | void> | void | T;
-export type ErrorMiddlewareType = <T>(error: Error | any) => T | Promise<T>;
+export type LambdaMiddlewareType = <T>(event: any, context?: any) => Promise<T | void> | void | T;
+export type ErrorMiddlewareType = <T>(error: Error | any, context?: any) => T | Promise<T>;
+
 export type ResponseMiddlewareType = LambdaMiddlewareType;
 
 export interface HandlerBuilderInterface extends LambdaMiddlewareType {

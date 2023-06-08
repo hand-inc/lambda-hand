@@ -43,7 +43,7 @@ export class HandlerRunner
     }
   }
 
-  async runErrorHandler(error: Error): Promise<HandlerError> {
+  async runErrorHandler(error: any): Promise<HandlerError> {
     if (!this.handlerRef.errorHandler) {
       this.dispatchEvent("error", { error });
       throw error;
@@ -51,7 +51,7 @@ export class HandlerRunner
 
     this.current = this.handlerRef.errorHandler;
 
-    const errorResponse = this.handlerRef.errorHandler(error);
+    const errorResponse = this.handlerRef.errorHandler(error, this.context);
 
     this.dispatchEvent("error", {
       error_handler_out: errorResponse,
