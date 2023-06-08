@@ -1,4 +1,5 @@
 import { HandlerBuilder } from "./handler.builder";
+import { HandlerEventsEmitter } from "./handler.events";
 import {
   ErrorMiddlewareType,
   HandlerBuilderInterface,
@@ -10,11 +11,13 @@ export class HandlerService {
   public middlewares: LambdaMiddlewareType[];
   public errorHandler: ErrorMiddlewareType | null;
   public responseHandler: ResponseMiddlewareType | null;
+  public eventsEmitter: HandlerEventsEmitter;
 
   constructor() {
     this.middlewares = [];
     this.responseHandler = null;
     this.errorHandler = null;
+    this.eventsEmitter = new HandlerEventsEmitter();
   }
 
   extends(handler: HandlerBuilderInterface): HandlerService {
