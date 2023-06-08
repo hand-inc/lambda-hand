@@ -3,6 +3,8 @@ import { HandlerService } from "./handler.service";
 import {
   ErrorMiddlewareType,
   HandlerBuilderInterface,
+  HandlerEventCallback,
+  HandlerEventTypes,
   LambdaMiddlewareType,
   ResponseMiddlewareType,
 } from "./types";
@@ -13,6 +15,14 @@ export const HandlerBuilder = (
   const handler = async (event: any, context: any) => {
     const runner = new HandlerRunner(event, context, HandlerServiceRef);
     return await runner.run();
+  };
+
+  handler.on = (
+    eventName: HandlerEventTypes,
+    callback: HandlerEventCallback
+  ) => {
+    HandlerServiceRef.eventsEmitter.on(eventName, callback);
+    return handler;
   };
 
   handler.getMiddlewares = (): LambdaMiddlewareType[] =>
