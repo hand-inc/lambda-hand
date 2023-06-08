@@ -18,9 +18,9 @@ describe('Use', ()=> {
   context('when using the "use" with 3 middlewares', () => {
     const handler = Handler();
     const event: any = {};
-    const middleware = (event: any) => {event.middleware1 = true;};
-    const middleware2 = (event: any) => {event.middleware2 = true;};
-    const middleware3 = (event: any) => {event.middleware3 = true;};
+    const middleware = async (event: any) => {event.middleware1 = true;};
+    const middleware2 = async (event: any) => {event.middleware2 = true;};
+    const middleware3 = async (event: any) => {event.middleware3 = true;};
     handler.use(middleware, middleware2, middleware3);
 
     it('should run the middlewares', async () => {
@@ -34,9 +34,9 @@ describe('Use', ()=> {
   context('when using the multiple "use"s', () => {
     const handler = Handler();
     const event: any = {};
-    const middleware = (event: any) => {event.middleware1 = true;};
-    const middleware2 = (event: any) => {event.middleware2 = true;};
-    const middleware3 = (event: any) => {event.middleware3 = true;};
+    const middleware = async (event: any) => {event.middleware1 = true;};
+    const middleware2 = async (event: any) => {event.middleware2 = true;};
+    const middleware3 = async (event: any) => {event.middleware3 = true;};
     handler.use(middleware).use(middleware2).use(middleware3);
 
     it('should run the middlewares', async () => {

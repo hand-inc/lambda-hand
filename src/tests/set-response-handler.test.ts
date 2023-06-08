@@ -5,7 +5,7 @@ describe('Set Response Handler', ()=> {
   context('when setting the response handler', () => {
     const handler = Handler();
 
-    const middleware = (event: any) => {
+    const middleware = async (event: any) => {
       event.middleware = true;
     };
 

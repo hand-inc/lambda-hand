@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { Handler } from "../handler";
+import { ErrorMiddlewareType } from "types";
 
 describe('Extends', ()=> {
   context('when extending a handler with 1 middleware', () => {
@@ -27,7 +28,6 @@ describe('Extends', ()=> {
     };
 
     const responseHandler = (event: any) => {
-      console.log('responseHandler');
       event.response = true;
       return event;
     };
@@ -39,7 +39,7 @@ describe('Extends', ()=> {
     const event: any = {};
 
     it('should run the responseMiddleware and returning the value', async () => {
-      const result = await newHandler(event, {});
+      const result: any = await newHandler(event, {});
       expect(event.response).to.be.true;
       expect(result.response).to.be.true;
     });
@@ -52,7 +52,7 @@ describe('Extends', ()=> {
       throw new Error('error');
     };
 
-    const errorHandler = (error: Error) => {
+    const errorHandler = (error: any) => {
       return error;
     };
 
