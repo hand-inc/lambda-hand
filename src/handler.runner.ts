@@ -36,11 +36,10 @@ export class HandlerRunner
     }
   }
 
-  async runErrorHandler(error: Error): Promise<HandlerError> {
+  async runErrorHandler(error: any): Promise<HandlerError> {
     if (this.handlerRef.errorHandler) {
-      return this.handlerRef.errorHandler(error);
+      return this.handlerRef.errorHandler(error, this.context);
     }
-
     throw error;
   }
 
