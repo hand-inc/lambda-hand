@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/ts-mocha/bin/ts-mocha -p tsconfig.json src/**/*.test.ts",
     "prepare": "npm run build",
     "prebuild": "rm -rf ./dist",
     "build": "tsc -p tsconfig.build.json"
@@ -21,7 +21,14 @@
   },
   "homepage": "https://github.com/hand-inc/lambda-hand#readme",
   "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.15.11",
+    "@types/sinon": "^10.0.15",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "sinon": "^15.1.0",
+    "ts-mocha": "^10.0.0",
     "typescript": "^5.0.4"
   }
 }
