@@ -1,4 +1,4 @@
-import { EventEmitter } from "node:events";
+import { EventEmitter } from "events";
 import { HandlerEventCallback, HandlerEventTypes } from "./types";
 
 export class HandlerEventsEmitter extends EventEmitter {
