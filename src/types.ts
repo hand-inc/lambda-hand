@@ -1,5 +1,11 @@
-export type LambdaMiddlewareType = <T>(event: any, context?: any) => Promise<T | void> | void | T;
-export type ErrorMiddlewareType = <T>(error: Error | any, context?: any) => T | Promise<T>;
+export type LambdaMiddlewareType = <T>(
+  event: any,
+  context?: any
+) => Promise<T | void> | void | T;
+export type ErrorMiddlewareType = <T>(
+  error: Error | any,
+  context?: any
+) => T | Promise<T>;
 
 export type ResponseMiddlewareType = LambdaMiddlewareType;
 
@@ -27,14 +33,26 @@ export interface HandlerRunnerInterface<T, Q> {
 
 export type HandlerEventCallback = (...args: any[]) => void;
 export type HandlerEventTypes =
-  | "hand:middleware_in"
-  | "hand:middleware_out"
-  | "hand:response_in"
-  | "hand:response_out"
+  | "hand:middleware:before"
+  | "hand:middleware:after"
+  | "hand:response:before"
+  | "hand:response:after"
   | "hand:start"
   | "hand:end"
   | "hand:error";
 
+export interface HandlerEventData {
+  type: HandlerEventTypes;
+  data: {
+    time: Date;
+    middleware_name: string;
+    execution_id: string | null;
+    step: number;
+    context: any;
+    event: any;
+    additional_info: any;
+  };
+}
 export type HandlerError = any;
 export type HandlerResponse = any;
 export type HandlerType = HandlerError | HandlerResponse;
