@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { HandlerService } from "./handler.service";
 import {
   HandlerError,
+  HandlerEventData,
   HandlerEventTypes,
   HandlerResponse,
   HandlerRunnerInterface,
@@ -54,7 +55,7 @@ export class HandlerRunner
     const errorResponse = this.handlerRef.errorHandler(error, this.context);
 
     this.dispatchEvent("hand:error", {
-      error_handler_out: errorResponse,
+      handler_response: errorResponse,
       error,
     });
 
@@ -64,17 +65,17 @@ export class HandlerRunner
   async runMiddleware(middleware: LambdaMiddlewareType): Promise<HandlerType> {
     this.current = middleware;
 
-    this.dispatchEvent("hand:middleware_in");
+    this.dispatchEvent("hand:middleware:before");
 
     await middleware(this.event, this.context);
 
-    this.dispatchEvent("hand:middleware_out");
+    this.dispatchEvent("hand:middleware:after");
 
     this.step++;
   }
 
   async runResponseHandler(): Promise<HandlerType> {
-    this.dispatchEvent("hand:response_in");
+    this.dispatchEvent("hand:response:before");
 
     if (!this.handlerRef.responseHandler) {
       return;
@@ -85,15 +86,15 @@ export class HandlerRunner
       this.context
     );
 
-    this.dispatchEvent("hand:response_out", {
-      response_handler_out: response || {},
+    this.dispatchEvent("hand:response:after", {
+      handler_response: response || {},
     });
 
     return response;
   }
 
-  dispatchEvent(type: HandlerEventTypes, data?: any): void {
-    const eventObject = {
+  dispatchEvent(type: HandlerEventTypes, additionalInfo?: any): void {
+    const eventObject: HandlerEventData = {
       type,
       data: {
         time: new Date(),
@@ -102,7 +103,7 @@ export class HandlerRunner
         middleware_name: this?.current?.name || "anonymous",
         execution_id: this.executionId,
         step: this.step,
-        additional_info: data,
+        additional_info: additionalInfo || null,
       },
     };
 
